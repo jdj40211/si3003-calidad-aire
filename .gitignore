@@ -6,3 +6,9 @@ __pycache__/
 data/raw/
 index/
 .DS_Store
+
+# Artefactos generados (se regeneran con los comandos del README)
+*.joblib
+eval/resultados.md
+eval/resultados.json
+eval/metricas_modelo.json
