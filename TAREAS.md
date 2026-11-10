@@ -8,7 +8,7 @@ Regla del equipo: **cada quien sube sus propios commits de su parte**, en ramas 
 |---|---|---|
 | Juan David Sierra | Agente LLM: loop con `T_max`, tool calling, RAG (corpus, embeddings, FAISS) e integración final | Agente 20 %, Reproducibilidad 10 % |
 | Keita Ashizawa | Datos y Parte 1: descarga, limpieza, EDA, modelo propio con métrica frente a la línea base | Parte 1 20 %, Rigor 15 % (parte del modelo) |
-| Integrante 3 | Dashboard en Streamlit (mapa, serie, predicción, chat), evaluación del agente (10 a 15 preguntas), informe de 4 páginas | Dashboard 10 %, Interacción 15 %, Rigor 15 % (parte del agente) |
+| Juan José Palacio | Dashboard en Streamlit (mapa, serie, predicción, chat), evaluación del agente (10 a 15 preguntas), informe de 4 páginas | Dashboard 10 %, Interacción 15 %, Rigor 15 % (parte del agente) |
 | Todos | README final, declaración de uso de IA, revisión cruzada y envío del correo | Presentación 5 %, Declaración 5 % |
 
 ## Cronograma real (quedan 3 días)
