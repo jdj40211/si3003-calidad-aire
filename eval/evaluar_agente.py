@@ -96,8 +96,7 @@ def main() -> int:
             f"- **Respuesta:** {r['respuesta']}",
             "",
         ]
-    RESULTADOS_MD.write_text("
-".join(lineas), encoding="utf-8")
+    RESULTADOS_MD.write_text("\n".join(lineas), encoding="utf-8")
 
     resumen = {"total": total, "aprobados": aprobados, "tasa_acierto": tasa, "casos": resultados}
     RESULTADOS_JSON.write_text(json.dumps(resumen, ensure_ascii=False, indent=2), encoding="utf-8")

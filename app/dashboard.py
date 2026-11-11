@@ -50,13 +50,8 @@ def cargar_estaciones() -> pd.DataFrame:
 
 def aviso_datos_faltantes(e: Exception) -> None:
     st.error(
-        "No se encontraron los datos procesados. Ejecuta primero el pipeline de datos:
-
-"
-        "```
-python -m src.datos.descargar
-python -m src.datos.procesar
-```"
+        "No se encontraron los datos procesados. Ejecuta primero el pipeline de datos:\n\n"
+        "```\npython -m src.datos.descargar\npython -m src.datos.procesar\n```"
     )
     st.caption(f"Detalle: {e}")
 

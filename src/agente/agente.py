@@ -83,8 +83,7 @@ def _redactar(pregunta: str, evidencia: list[dict]) -> tuple[str, list[str]]:
             )
         elif herr == "search_docs":
             for r in res.get("resultados", []):
-                fragmento = r["fragmento"].replace("
-", " ").strip()
+                fragmento = r["fragmento"].replace("\n", " ").strip()
                 if len(fragmento) > 320:
                     fragmento = fragmento[:317] + "..."
                 partes.append(f"Según {r['fuente']}: {fragmento}")
@@ -95,14 +94,10 @@ def _redactar(pregunta: str, evidencia: list[dict]) -> tuple[str, list[str]]:
         return ("No encontré información suficiente para responder con los datos y documentos disponibles.", fuentes)
 
     respuesta = " ".join(partes)
-    respuesta += ("
-
-Nota: herramienta académica; no reemplaza el consejo médico ni los avisos "
+    respuesta += ("\n\nNota: herramienta académica; no reemplaza el consejo médico ni los avisos "
                   "oficiales del SIATA y el AMVA.")
     if fuentes:
-        respuesta += "
-
-Fuentes: " + "; ".join(fuentes)
+        respuesta += "\n\nFuentes: " + "; ".join(fuentes)
     return respuesta, fuentes
 
 class AgenteCalidadAire:
@@ -157,7 +152,4 @@ if __name__ == "__main__":
     preguntas = sys.argv[1:] or ["¿Qué significa la categoría dañina para grupos sensibles?"]
     for p in preguntas:
         t = agente.responder(p)
-        print(f"
-P: {p}
-R: {t.respuesta}
-Herramientas: {t.herramientas_usadas}")
+        print(f"\nP: {p}\nR: {t.respuesta}\nHerramientas: {t.herramientas_usadas}")
