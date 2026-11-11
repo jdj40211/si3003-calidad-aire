@@ -7,8 +7,6 @@ data/raw/
 index/
 .DS_Store
 
-# Artefactos generados (se regeneran con los comandos del README)
+# Artefactos generados (se regeneran con los comandos del README).
+# Los resultados de la evaluación sí se versionan: el profesor revisa el repo sin sustentación.
 *.joblib
-eval/resultados.md
-eval/resultados.json
-eval/metricas_modelo.json

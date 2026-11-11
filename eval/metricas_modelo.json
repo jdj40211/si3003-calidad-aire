@@ -1,0 +1,10 @@
+{
+  "n_entrenamiento": 1739,
+  "n_prueba": 435,
+  "accuracy_modelo": 0.9586,
+  "accuracy_baseline": 0.9494,
+  "f1_macro_modelo": 0.3929,
+  "f1_macro_baseline": 0.3247,
+  "f1_weighted_modelo": 0.9582,
+  "mejora_accuracy_vs_baseline": 0.0092
+}

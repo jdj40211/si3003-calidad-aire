@@ -1,0 +1,397 @@
+{
+  "agente": "LLM (nvidia/nemotron-3.5-super-vl-120b-a12b)",
+  "total": 15,
+  "aprobados": 15,
+  "tasa_acierto": 100.0,
+  "casos": [
+    {
+      "id": 1,
+      "pregunta": "¿Qué significa la categoría dañina para grupos sensibles?",
+      "categoria": "normativa",
+      "respuesta": "Significa que el aire tiene niveles de PM2.5 que pueden afectar la salud de las personas más vulnerables, como niños, adultos mayores y quienes tienen enfermedades cardíacas o pulmonares (Resolución 2254 de 2017, Puntos de corte del ICA para PM2.5). En esta categoría, los grupos sensibles pueden presentar efectos sobre la salud, mientras que el resto de la población probablemente no se vea afectada (Resolución 2254 de 2017, Índice de Calidad del Aire, ICA). En general, se recomienda reducir actividades al aire libre prolongadas o intensas si perteneces a un grupo sensible. Consulta los avisos oficiales del SIATA y del Área Metropolitana del Valle de Aburrá para conocer las medidas específicas.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "res2254_norma_calidad_aire.md"
+      ],
+      "claves_encontradas": [
+        "sensible"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 2,
+      "pregunta": "¿Cómo estará la calidad del aire mañana en el valle?",
+      "categoria": "prediccion",
+      "respuesta": "Mañana se espera calidad del aire Aceptable en el valle, con 93,3 % de probabilidad (Modelo del proyecto). Hoy el promedio del valle fue de 18,12 µg/m³ de PM2,5, con un máximo de 25,1 µg/m³ (Datos: SISAIRE-IDEAM, promedio del valle, 31 de diciembre de 2025). En general, una categoría Aceptable puede afectar a personas muy sensibles a la contaminación. Consulta los avisos oficiales del SIATA y del Área Metropolitana si perteneces a un grupo de riesgo.",
+      "herramientas_usadas": [
+        "predict_tomorrow"
+      ],
+      "herramientas_esperadas": [
+        "predict_tomorrow"
+      ],
+      "fuentes": [],
+      "claves_encontradas": [
+        "modelo",
+        "categoría"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 3,
+      "pregunta": "¿Cuál es el PM2.5 más reciente de la estación Altavista?",
+      "categoria": "datos",
+      "respuesta": "El PM2.5 más reciente de la estación Altavista es de 25,1 µg/m³, con categoría ICA \"Aceptable\", medido el 31 de diciembre de 2025 (Datos: SISAIRE-IDEAM, estación ALTAVISTA, 2025-12-31).",
+      "herramientas_usadas": [
+        "get_pm25"
+      ],
+      "herramientas_esperadas": [
+        "get_pm25"
+      ],
+      "fuentes": [],
+      "claves_encontradas": [
+        "µg/m³"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 4,
+      "pregunta": "¿Qué dice el protocolo cuando hay alerta naranja?",
+      "categoria": "protocolo",
+      "respuesta": "Cuando hay alerta naranja, el protocolo POECA ordena informar el episodio y publicar diariamente la evolución del ICA, recomendar a la comunidad reducir la exposición de los grupos sensibles y minimizar emisiones, sugerir a los establecimientos educativos reducir el esfuerzo prolongado al aire libre, y hacer más campañas de educación en sitios de atención en salud (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Medidas en Alerta naranja). La alerta naranja corresponde a un ICA de 101 a 150, es decir 35,5 a 55,4 µg/m³ de PM2.5 en promedio de 24 horas (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Niveles de contingencia por PM2.5 (Artículo 11)). En general, este nivel indica calidad del aire aceptable pero con riesgo para grupos sensibles. Consulta los avisos oficiales del SIATA y del Área Metropolitana del Valle de Aburrá.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "poeca_acuerdo15_2016.md"
+      ],
+      "claves_encontradas": [
+        "naranja"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 5,
+      "pregunta": "¿Puedo hacer ejercicio al aire libre si el aire está dañino para la salud?",
+      "categoria": "salud",
+      "respuesta": "No se recomienda hacer ejercicio al aire libre cuando el aire está dañino para la salud, porque al hacer ejercicio se respira más profundo y se inhala más contaminación (Fuente: Resolución 2254 de 2017, Índice de Calidad del Aire, ICA (Artículos 18 a 21, Tabla 5)). En niveles naranja, los grupos sensibles pueden presentar efectos sobre la salud; en rojo, todos pueden empezar a experimentarlos (Fuente: Resolución 2254 de 2017, Índice de Calidad del Aire, ICA (Artículos 18 a 21, Tabla 5)). El protocolo POECA recomienda reducir el esfuerzo prolongado al aire libre en alerta naranja y que niños y adolescentes no realicen actividades al aire libre en alerta roja fase II (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Medidas en Alerta naranja y Medidas en Alerta roja fase II). En general, es mejor hacer ejercicio en interiores o en horarios con mejor calidad del aire. Consulta los avisos oficiales del SIATA y del Área Metropolitana antes de salir.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "res2254_norma_calidad_aire.md",
+        "poeca_acuerdo15_2016.md"
+      ],
+      "claves_encontradas": [
+        "aire libre",
+        "esfuerzo"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 6,
+      "pregunta": "¿Cuáles son las temporadas críticas de contaminación en el Valle de Aburrá?",
+      "categoria": "protocolo",
+      "respuesta": "Las temporadas críticas son febrero a abril y octubre a noviembre, según el protocolo POECA del Área Metropolitana (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Temporadas críticas (Artículo 15)). En marzo, la transición entre la temporada seca y la primera temporada de lluvias genera las concentraciones más altas de PM10 y PM2.5 del año (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Temporadas críticas (Artículo 15)). En noviembre, al pasar de la temporada de lluvias a la seca, las concentraciones vuelven a subir (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Temporadas críticas (Artículo 15)). Esto ocurre porque el valle es una cuenca atmosférica rodeada de montañas que dificulta la dispersión de los contaminantes (Fuente: POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Por qué el valle acumula contaminantes (Artículo 3)). En general, los episodios críticos pueden presentarse en cualquier momento del año cuando se constaten eventos de alta contaminación. Consulte los avisos oficiales del SIATA y del Área Metropolitana para conocer el estado actual y las recomendaciones de salud.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "poeca_acuerdo15_2016.md"
+      ],
+      "claves_encontradas": [
+        "marzo",
+        "octubre"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 7,
+      "pregunta": "¿Qué nivel de PM2.5 tiene el valle en los últimos días?",
+      "categoria": "datos",
+      "respuesta": "En los últimos 7 días el promedio del valle estuvo entre 14.33 y 20.22 µg/m³ de PM2.5, con el valor más reciente de 18.12 µg/m³ el 31 de diciembre de 2025 (Datos: SISAIRE-IDEAM, promedio del valle, 2025-12-31). En general, estos valores se sitúan en rangos moderados, pero para saber si representan un riesgo para la salud se deben consultar los niveles oficiales del SIATA y del Área Metropolitana.",
+      "herramientas_usadas": [
+        "get_pm25"
+      ],
+      "herramientas_esperadas": [
+        "get_pm25"
+      ],
+      "fuentes": [],
+      "claves_encontradas": [
+        "µg/m³",
+        "promedio"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 8,
+      "pregunta": "¿Qué es el PM2.5 y por qué es peligroso para la salud?",
+      "categoria": "normativa",
+      "respuesta": "El PM2.5 son partículas finas en suspensión de menos de 2,5 micrómetros de diámetro, presentes en la contaminación del aire (Fuente: OMS: contaminación del aire ambiente y salud, Material particulado y efectos en la salud). Su exposición causa enfermedades cardiovasculares y respiratorias, cánceres, accidentes cerebrovasculares, cardiopatías y neumopatías crónicas y agudas, como el asma (Fuente: OMS: contaminación del aire ambiente y salud, Material particulado y efectos en la salud). Según la Resolución 2254 de 2017, cuando el ICA por material particulado supera 100, los grupos sensibles —personas con enfermedad cardíaca o pulmonar, adultos mayores y niños— corren mayor riesgo (Fuente: Resolución 2254 de 2017: norma de calidad del aire en Colombia, Índice de Calidad del Aire, ICA (Artículos 18 a 21, Tabla 5)). En general, al ser tan pequeñas, estas partículas pueden penetrar profundamente en los pulmones y llegar al torrente sanguíneo. Consulta los avisos oficiales del SIATA y del Área Metropolitana del Valle de Aburrá cuando haya riesgo para la salud.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "oms_contaminacion_aire_salud.md",
+        "res2254_norma_calidad_aire.md"
+      ],
+      "claves_encontradas": [
+        "partículas",
+        "respirat"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 9,
+      "pregunta": "¿Qué norma colombiana regula la calidad del aire?",
+      "categoria": "normativa",
+      "respuesta": "La norma colombiana que regula la calidad del aire es la Resolución 2254 de 2017, que establece los límites máximos permisibles de contaminantes y el Índice de Calidad del Aire (ICA) (Fuente: Resolución 2254 de 2017: norma de calidad del aire en Colombia, Meta a 2030 (Artículo 3, Tabla 2)). En general, esta resolución también define los niveles de prevención, alerta y emergencia para proteger la salud.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "res2254_norma_calidad_aire.md"
+      ],
+      "claves_encontradas": [
+        "2254",
+        "2017"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 10,
+      "pregunta": "¿Qué recomiendan para los niños cuando la calidad del aire es mala?",
+      "categoria": "salud",
+      "respuesta": "Cuando el aire es dañino para grupos sensibles (ICA naranja o peor), los niños deben evitar el esfuerzo prolongado al aire libre (Fuente: POECA del Área Metropolitana, Medidas en Alerta naranja y Alerta roja fase I). En Alerta roja fase II, los establecimientos educativos reciben la instrucción de que los niños y adolescentes no realicen actividades al aire libre (Fuente: POECA del Área Metropolitana, Medidas en Alerta roja fase II). La Resolución 2254 de 2017 señala que los niños son un grupo sensible y pueden presentar efectos sobre la salud con ICA de 101 en adelante (Fuente: Resolución 2254 de 2017, Tabla 5 del ICA). En general, manténgase informado con los avisos oficiales del SIATA y del Área Metropolitana del Valle de Aburrá. Esta es una herramienta académica, no un consejo médico personalizado.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "poeca_acuerdo15_2016.md"
+      ],
+      "claves_encontradas": [
+        "sensible",
+        "aire libre"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 11,
+      "pregunta": "¿Se prevé un episodio crítico para mañana?",
+      "categoria": "prediccion",
+      "respuesta": "No se prevé un episodio crítico para mañana. El modelo del proyecto estima una categoría “Aceptable” con 93,3 % de probabilidad y solo un 6,7 % de “Dañina para grupos sensibles o peor” (Modelo del proyecto). Según el POECA del Área Metropolitana, los episodios críticos comienzan con alerta naranja (ICA 101–150, es decir 35,5 a 55,4 µg/m³ de PM2.5) (POECA: protocolo para episodios críticos de contaminación en el Valle de Aburrá, Niveles de contingencia por PM2.5 (Artículo 11)). La predicción se basa en datos hasta el 31 de diciembre de 2025 y no sustituye los avisos oficiales del SIATA ni del Área Metropolitana.",
+      "herramientas_usadas": [
+        "predict_tomorrow",
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "predict_tomorrow"
+      ],
+      "fuentes": [
+        "poeca_acuerdo15_2016.md"
+      ],
+      "claves_encontradas": [
+        "categoría"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 12,
+      "pregunta": "¿Qué papel cumple el SIATA en el monitoreo del aire?",
+      "categoria": "protocolo",
+      "respuesta": "El SIATA opera estaciones de monitoreo de calidad del aire en el Valle de Aburrá y publica reportes diarios del ICA de PM2.5, que muestran el impacto real de los contaminantes en la salud de la población (Reporte diario del ICA de PM2.5 del SIATA, Estaciones de representatividad poblacional). Sus mediciones permiten identificar condiciones desfavorables para la dispersión de contaminantes cuando el ICA está en niveles rojo o naranja (Reporte diario del ICA de PM2.5 del SIATA, Estaciones de representatividad poblacional). En general, el SIATA es una entidad técnica que genera información y alertas para apoyar la toma de decisiones sobre la calidad del aire en el área metropolitana.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "siata_reporte_ica.md"
+      ],
+      "claves_encontradas": [
+        "estaciones",
+        "alertas"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 13,
+      "pregunta": "¿Qué tipo de mascarilla debo usar si el aire está muy dañino?",
+      "categoria": "fuera_de_corpus",
+      "respuesta": "No encontré en los documentos oficiales del Valle de Aburrá una recomendación específica de tipo de mascarilla para aire muy dañino. En general, cuando el aire está muy dañino o peligroso, lo más efectivo es reducir la exposición quedándose en interiores y evitando actividades al aire libre; si debe salir, una mascarilla bien ajustada que filtre partículas finas puede ayudar, pero no elimina todos los riesgos. Esta no es una recomendación médica personalizada. Consulte los avisos oficiales del SIATA y del Área Metropolitana del Valle de Aburrá para medidas de protección durante episodios críticos.",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [],
+      "claves_encontradas": [
+        "no encontr"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 14,
+      "pregunta": "¿Cuánto fue el PM2.5 en la estación Almacén General de EPM?",
+      "categoria": "datos",
+      "respuesta": "En la estación Almacén General de EPM, el último PM2.5 disponible fue de 17,05 µg/m³ el 31 de diciembre de 2025, con categoría ICA Aceptable. En los últimos 7 días los valores estuvieron entre 13,25 y 18,0 µg/m³, todos en categoría Aceptable (Datos: SISAIRE-IDEAM, estación ALMACÉN GENERAL DE EPM, del 25 al 31 de diciembre de 2025). En general, el PM2.5 mide partículas finas en el aire que pueden afectar la salud cuando se elevan. Consulta los avisos oficiales del SIATA y del Área Metropolitana si hay riesgo para la salud.",
+      "herramientas_usadas": [
+        "get_pm25"
+      ],
+      "herramientas_esperadas": [
+        "get_pm25"
+      ],
+      "fuentes": [],
+      "claves_encontradas": [
+        "µg/m³"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    },
+    {
+      "id": 15,
+      "pregunta": "¿Cuál es el valor máximo anual permitido de PM2.5 en Colombia?",
+      "categoria": "normativa",
+      "respuesta": "Según la Resolución 2254 de 2017, el valor máximo anual permitido de PM2.5 es de 25 µg/m³ como promedio anual desde el 1 de enero de 2018, y se reducirá a 15 µg/m³ a partir del 1 de enero de 2030 (Fuente: Resolución 2254 de 2017: norma de calidad del aire en Colombia, Límite diario y anual de PM2.5 (Artículo 2, Tabla 1); Meta a 2030 (Artículo 3, Tabla 2)).",
+      "herramientas_usadas": [
+        "search_docs"
+      ],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "fuentes": [
+        "res2254_norma_calidad_aire.md"
+      ],
+      "claves_encontradas": [
+        "25",
+        "anual"
+      ],
+      "checks": {
+        "herramientas_ok": true,
+        "claves_ok": true,
+        "cita_ok": true,
+        "sin_error": true
+      },
+      "aprueba": true
+    }
+  ],
+  "comparacion": [
+    {
+      "agente": "LLM (nvidia/nemotron-3.5-super-vl-120b-a12b)",
+      "aprobados": 15,
+      "total": 15
+    },
+    {
+      "agente": "Reglas (respaldo)",
+      "aprobados": 12,
+      "total": 15
+    }
+  ]
+}
