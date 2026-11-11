@@ -31,14 +31,14 @@ Construimos un asistente que (1) muestra las mediciones reales de las estaciones
 
 ## 4. Parte 2 — Agente con RAG (IA moderna)
 
-**Arquitectura** (`src/agente/`). Un loop de razonamiento-acción acotado por `T_max` iteraciones que, en cada turno, decide qué herramientas usar, las ejecuta, reúne la evidencia y redacta una respuesta con citas. Se registra una **traza** de cada pregunta (herramientas invocadas, argumentos, resultados) útil para depurar y evaluar.
+**Arquitectura** (`src/agente/agente.py`). Un LLM con *tool calling* (por defecto `nemotron-3.5-super-vl` en NVIDIA NIM, por medio del SDK de OpenAI; Groq como alternativa) ejecuta un loop acotado por `T_MAX = 5` iteraciones: en cada turno decide si llama una herramienta o si ya puede responder; el resultado de la herramienta, incluido un posible error, vuelve al LLM como observación. Si se agotan las iteraciones, se le pide una respuesta final sin más herramientas, y se evita repetir una llamada con los mismos argumentos. El prompt exige citar cada dato con el documento y la sección, decir la fecha de las mediciones y no dar consejo médico. Se registra una **traza** de cada pregunta (modo, herramientas, argumentos, resultados y fuentes citadas). Si no hay clave de API o el proveedor falla, responde un **agente de respaldo por reglas** que elige las herramientas por palabras clave, para que el chat nunca quede sin respuesta durante la demo.
 
 **Herramientas** (`src/agente/herramientas.py`), cada una con nombre, descripción y esquema de argumentos:
 - `get_pm25(estacion, dias)` — mediciones diarias recientes de una estación o del promedio del valle.
 - `predict_tomorrow()` — categoría prevista del día siguiente (reutiliza el modelo de la Parte 1).
 - `search_docs(consulta, k)` — recuperación sobre el corpus con la fuente de cada fragmento.
 
-**RAG** (`src/agente/rag.py`). El corpus (`docs/corpus/`) contiene la Resolución 2254 de 2017 (categorías ICA y límites de PM2.5), el protocolo de episodios críticos del AMVA/SIATA y las recomendaciones de salud. Los documentos se fragmentan por párrafos y se indexan con TF-IDF; la consulta recupera los fragmentos más similares por coseno. Se eligió una recuperación ligera y **sin dependencias de red** para que la app y la evaluación corran de forma reproducible desde cero; la interfaz (`buscar(consulta, k)`) permite sustituirla por embeddings + FAISS sin tocar el resto del agente.
+**RAG** (`src/agente/rag.py`). El corpus (`docs/corpus/`) se construyó a partir de documentos oficiales, cuyo texto extraído queda en `docs/fuentes/`: la Resolución 2254 de 2017 (límite diario de 37 µg/m³, niveles de prevención, alerta y emergencia, y tabla del ICA con sus efectos), el protocolo del POECA del Área Metropolitana (Acuerdo 15 de 2016: niveles, medidas y temporadas críticas), el reporte diario del ICA del SIATA y la nota descriptiva de la OMS sobre contaminación y salud. Los documentos se fragmentan por secciones, y cada fragmento conserva el documento, la sección y la URL para citarlo. La búsqueda es **híbrida**: embeddings multilingües (`paraphrase-multilingual-MiniLM-L12-v2`, ejecutado con fastembed/ONNX, sin GPU) en un índice **FAISS** de producto interno, combinados con TF-IDF mediante **Reciprocal Rank Fusion** (k = 60). Los embeddings capturan el significado de preguntas parafraseadas; TF-IDF rescata siglas y términos exactos ("ND", "naranja") que el modelo pequeño de embeddings, por sí solo, no recuperaba.
 
 **Robustez.** Cada herramienta captura sus propios errores y devuelve `{"error": ...}` en lugar de lanzar excepciones, de modo que el agente informa el fallo en vez de romperse (p. ej. estación inexistente o datos no disponibles). Toda respuesta incluye la advertencia de que es una herramienta académica y no reemplaza los avisos del SIATA/AMVA.
 
@@ -56,15 +56,15 @@ Las vistas de predicción y chat consumen los módulos del equipo a través de i
 
 Se definió un banco de **15 preguntas** (`eval/preguntas.json`) que cubre datos, predicción, normativa, protocolos y salud. El script `eval/evaluar_agente.py` ejecuta el agente en cada una y verifica cuatro criterios: que use las herramientas esperadas, que la respuesta contenga palabras clave relevantes, que **cite una fuente** cuando corresponde y que no devuelva error. Genera un reporte legible en `eval/resultados.md` y un resumen en JSON, con la tasa de acierto global. Este diseño evalúa explícitamente las capacidades que pide la rúbrica: uso de ≥ 2 herramientas, RAG con citas y manejo de errores.
 
+**Resultados.** El script corre las 15 preguntas con el agente LLM y con el de reglas. En la última corrida el LLM aprobó 15 de 15 (herramienta correcta en 15 de 15 y cita en todas las que lo requerían) y el de reglas 12 de 15; entre corridas el LLM obtuvo de 13 a 15, porque su salida varía. El agente de reglas falla, por ejemplo, en «¿cuál es el valor máximo anual permitido?»: detecta «PM2.5» y consulta las mediciones en lugar de la norma. La pregunta 13 (qué mascarilla usar) no tiene respuesta en los documentos, y el LLM lo dice en lugar de inventarla. Una revisión manual encontró que una versión anterior del prompt citaba documentos para afirmaciones que no estaban en el fragmento; se corrigió exigiendo que la cita solo acompañe lo que el fragmento dice. Las palabras clave de tres preguntas se corrigieron porque contradecían la norma (por ejemplo, esperaban «37» para la categoría que según la Resolución 2254 empieza en 38 µg/m³); el motivo de cada cambio queda en `preguntas.json`.
+
 ## 7. Reproducibilidad y cómo ejecutarlo
 
-
-
-Todo corre sin claves de API ni conexión externa: los datos están versionados y el RAG es local.
+El README tiene los pasos completos: crear un entorno virtual, `pip install -r requirements.txt`, copiar `.env.example` a `.env` con una clave de NVIDIA NIM o Groq, y `streamlit run app/dashboard.py`. Los datos procesados están versionados, así que la app no depende de la API de datos.gov.co. La primera ejecución descarga el modelo de embeddings (unos 220 MB) y entrena el clasificador; las siguientes reutilizan lo guardado. Se verificó clonando el repositorio en una carpeta nueva y siguiendo solo el README: el dashboard y el chat funcionaron en unos 45 s la primera vez. Sin clave de API, la app también corre con el agente de respaldo.
 
 ## 8. Limitaciones y trabajo futuro
 
 - La línea base de persistencia es exigente: en días estables la ganancia del modelo es moderada; el valor del modelo está sobre todo en anticipar los cambios de categoría.
-- El RAG actual (TF-IDF) es simple y literal; migrar a embeddings + FAISS mejoraría las consultas parafraseadas.
-- El corpus es acotado (tres documentos de referencia); ampliarlo con más normativa y boletines del SIATA daría respuestas más ricas.
+- El corpus resume el POECA de 2016; existe una actualización de 2018 (Acuerdo Metropolitano 04) que no se incorporó. Tampoco incluye recomendaciones oficiales sobre mascarillas.
+- El agente depende de un proveedor externo de LLM: sin clave o sin conexión, responde el agente de respaldo, con menos precisión. La evaluación por palabras clave no garantiza que cada respuesta sea correcta, y el LLM puede variar entre corridas.
 - El sistema es una herramienta académica y **no** constituye consejo médico ni sustituye los avisos oficiales del SIATA ni del AMVA.
