@@ -80,7 +80,7 @@ def vista_mapa(df: pd.DataFrame, estaciones: pd.DataFrame) -> None:
         fig.update_traces(marker={"size": 14})
         fig.update_layout(mapbox_style="carto-positron", margin={"l": 0, "r": 0, "t": 10, "b": 0},
                           legend_title_text="Categoría ICA")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     except Exception:
         st.map(mapa.rename(columns={"latitud": "lat", "longitud": "lon"})[["lat", "lon"]])
 
@@ -88,7 +88,7 @@ def vista_mapa(df: pd.DataFrame, estaciones: pd.DataFrame) -> None:
         mapa[["estacion", "municipio", "pm25", "ica", "fecha"]]
         .rename(columns={"estacion": "Estación", "municipio": "Municipio",
                          "pm25": "PM2.5 (µg/m³)", "ica": "Categoría", "fecha": "Fecha"}),
-        use_container_width=True, hide_index=True,
+        width="stretch", hide_index=True,
     )
 
 def vista_serie(df: pd.DataFrame) -> None:
@@ -130,7 +130,7 @@ def vista_serie(df: pd.DataFrame) -> None:
                           annotation_text=txt, annotation_position="right")
         fig.update_layout(title=titulo, xaxis_title="Fecha", yaxis_title="PM2.5 (µg/m³)",
                           height=480, margin={"t": 50})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     except Exception:
         st.line_chart(serie.set_index("dia")["pm25"])
 
@@ -191,9 +191,15 @@ def vista_chat() -> None:
 
         agente = AgenteCalidadAire()
     except Exception as e:  # noqa: BLE001
-        st.warning("El agente no está disponible todavía (Parte 2 en construcción).")
+        st.error("No se pudo iniciar el agente.")
         st.caption(f"Detalle técnico: {e}")
         return
+
+    if agente.modo == "llm":
+        st.caption(f"Modelo: {agente.config['modelo']} ({agente.config['proveedor']})")
+    else:
+        st.info("No hay clave de LLM configurada: el chat usa el agente de respaldo por reglas. "
+                "Para usar el LLM, agrega NVIDIA_API_KEY o GROQ_API_KEY en el archivo .env (ver README).")
 
     ejemplos = [
         "¿Qué significa la categoría dañina para grupos sensibles?",
@@ -218,8 +224,19 @@ def vista_chat() -> None:
             with st.spinner("Consultando datos y documentos..."):
                 traza = agente.responder(pregunta)
             st.markdown(traza.respuesta)
+            detalle = []
             if traza.herramientas_usadas:
-                st.caption("Herramientas usadas: " + ", ".join(traza.herramientas_usadas))
+                detalle.append("Herramientas: " + ", ".join(traza.herramientas_usadas))
+            if traza.fuentes:
+                detalle.append("Fuentes citadas: " + ", ".join(traza.fuentes))
+            if traza.nota:
+                detalle.append(traza.nota)
+            if detalle:
+                st.caption(" · ".join(detalle))
+            if traza.pasos:
+                with st.expander("Ver los pasos del agente"):
+                    for paso in traza.pasos:
+                        st.markdown(f"**{paso['iteracion'] + 1}. {paso['herramienta']}** `{paso['args']}`")
         st.session_state.historial.append({"rol": "assistant", "texto": traza.respuesta})
 
 def main() -> None:
