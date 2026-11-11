@@ -9,3 +9,4 @@ streamlit>=1.36
 plotly>=5.22
 fastembed>=0.9
 faiss-cpu>=1.8
+openai>=1.40
