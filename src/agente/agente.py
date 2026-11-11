@@ -140,6 +140,9 @@ Reglas:
    Las mediciones de get_pm25 se citan como (Datos: SISAIRE-IDEAM, estación <nombre>, <fecha>)
    y la predicción como (Modelo del proyecto). No atribuyas a una norma un dato que salió de
    get_pm25 o de predict_tomorrow.
+   Una cita solo puede acompañar lo que el fragmento dice de forma explícita. Si agregas una
+   explicación general que no está en el fragmento, no le pongas cita e introdúcela con
+   "En general," para que el lector sepa que no viene de los documentos.
 4. Si una herramienta devuelve un error, explícalo con claridad y responde con lo que sí sepas.
 5. Los datos llegan hasta el 31 de diciembre de 2025: di siempre la fecha de la medición y no
    la presentes como el dato de hoy.

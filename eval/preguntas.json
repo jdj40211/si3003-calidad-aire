@@ -4,120 +4,206 @@
     {
       "id": 1,
       "pregunta": "¿Qué significa la categoría dañina para grupos sensibles?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["sensibles", "37"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "sensible",
+        "38",
+        "55"
+      ],
       "espera_cita": true,
-      "categoria": "normativa"
+      "categoria": "normativa",
+      "nota": "Antes esperaba '37', pero según la Resolución 2254 de 2017 esta categoría va de 38 a 55 µg/m³; 37 es el tope de Aceptable."
     },
     {
       "id": 2,
       "pregunta": "¿Cómo estará la calidad del aire mañana en el valle?",
-      "herramientas_esperadas": ["predict_tomorrow"],
-      "palabras_clave": ["modelo", "categoría"],
+      "herramientas_esperadas": [
+        "predict_tomorrow"
+      ],
+      "palabras_clave": [
+        "modelo",
+        "categoría"
+      ],
       "espera_cita": false,
       "categoria": "prediccion"
     },
     {
       "id": 3,
       "pregunta": "¿Cuál es el PM2.5 más reciente de la estación Altavista?",
-      "herramientas_esperadas": ["get_pm25"],
-      "palabras_clave": ["µg/m³"],
+      "herramientas_esperadas": [
+        "get_pm25"
+      ],
+      "palabras_clave": [
+        "µg/m³"
+      ],
       "espera_cita": false,
       "categoria": "datos"
     },
     {
       "id": 4,
       "pregunta": "¿Qué dice el protocolo cuando hay alerta naranja?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["naranja", "restrin"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "naranja",
+        "restrin"
+      ],
       "espera_cita": true,
       "categoria": "protocolo"
     },
     {
       "id": 5,
       "pregunta": "¿Puedo hacer ejercicio al aire libre si el aire está dañino para la salud?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["reducir", "interior"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "aire libre",
+        "esfuerzo",
+        "evit"
+      ],
       "espera_cita": true,
-      "categoria": "salud"
+      "categoria": "salud",
+      "nota": "Antes esperaba 'reducir' o 'interior'; el POECA habla de evitar el esfuerzo prolongado al aire libre."
     },
     {
       "id": 6,
       "pregunta": "¿Cuáles son las temporadas críticas de contaminación en el Valle de Aburrá?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["marzo", "octubre"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "marzo",
+        "octubre"
+      ],
       "espera_cita": true,
       "categoria": "protocolo"
     },
     {
       "id": 7,
       "pregunta": "¿Qué nivel de PM2.5 tiene el valle en los últimos días?",
-      "herramientas_esperadas": ["get_pm25"],
-      "palabras_clave": ["µg/m³", "promedio"],
+      "herramientas_esperadas": [
+        "get_pm25"
+      ],
+      "palabras_clave": [
+        "µg/m³",
+        "promedio"
+      ],
       "espera_cita": false,
       "categoria": "datos"
     },
     {
       "id": 8,
       "pregunta": "¿Qué es el PM2.5 y por qué es peligroso para la salud?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["partículas", "respirat"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "partículas",
+        "respirat"
+      ],
       "espera_cita": true,
       "categoria": "normativa"
     },
     {
       "id": 9,
       "pregunta": "¿Qué norma colombiana regula la calidad del aire?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["2254", "2017"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "2254",
+        "2017"
+      ],
       "espera_cita": true,
       "categoria": "normativa"
     },
     {
       "id": 10,
       "pregunta": "¿Qué recomiendan para los niños cuando la calidad del aire es mala?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["sensibles", "interior"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "sensible",
+        "aire libre"
+      ],
       "espera_cita": true,
-      "categoria": "salud"
+      "categoria": "salud",
+      "nota": "Antes esperaba 'interior', que no aparece en el POECA; el protocolo habla de evitar el esfuerzo al aire libre."
     },
     {
       "id": 11,
       "pregunta": "¿Se prevé un episodio crítico para mañana?",
-      "herramientas_esperadas": ["predict_tomorrow"],
-      "palabras_clave": ["categoría", "día siguiente"],
+      "herramientas_esperadas": [
+        "predict_tomorrow"
+      ],
+      "palabras_clave": [
+        "categoría",
+        "día siguiente"
+      ],
       "espera_cita": false,
       "categoria": "prediccion"
     },
     {
       "id": 12,
       "pregunta": "¿Qué papel cumple el SIATA en el monitoreo del aire?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["estaciones", "alertas"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "estaciones",
+        "alertas"
+      ],
       "espera_cita": true,
       "categoria": "protocolo"
     },
     {
       "id": 13,
-      "pregunta": "¿Debo usar mascarilla si el aire está muy dañino?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["N95", "interior"],
-      "espera_cita": true,
-      "categoria": "salud"
+      "pregunta": "¿Qué tipo de mascarilla debo usar si el aire está muy dañino?",
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "no encontr",
+        "no tengo",
+        "no incluye",
+        "no menciona",
+        "no cubre",
+        "no aparece",
+        "no especifica",
+        "no contiene",
+        "no hay información"
+      ],
+      "espera_cita": false,
+      "categoria": "fuera_de_corpus",
+      "nota": "Ninguna fuente oficial del corpus recomienda un tipo de mascarilla: se espera que el agente lo diga y no invente."
     },
     {
       "id": 14,
       "pregunta": "¿Cuánto fue el PM2.5 en la estación Almacén General de EPM?",
-      "herramientas_esperadas": ["get_pm25"],
-      "palabras_clave": ["µg/m³"],
+      "herramientas_esperadas": [
+        "get_pm25"
+      ],
+      "palabras_clave": [
+        "µg/m³"
+      ],
       "espera_cita": false,
       "categoria": "datos"
     },
     {
       "id": 15,
       "pregunta": "¿Cuál es el valor máximo anual permitido de PM2.5 en Colombia?",
-      "herramientas_esperadas": ["search_docs"],
-      "palabras_clave": ["25", "anual"],
+      "herramientas_esperadas": [
+        "search_docs"
+      ],
+      "palabras_clave": [
+        "25",
+        "anual"
+      ],
       "espera_cita": true,
       "categoria": "normativa"
     }
