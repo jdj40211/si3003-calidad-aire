@@ -80,7 +80,8 @@ def search_docs(consulta: str, k: int = 3) -> dict:
     return {
         "consulta": consulta,
         "resultados": [
-            {"fuente": r["fuente"], "fragmento": r["texto"], "relevancia": round(r["score"], 4)}
+            {"fuente": r["fuente"], "documento": r.get("documento", ""), "seccion": r.get("seccion", ""),
+             "url": r.get("url", ""), "fragmento": r["texto"], "relevancia": round(r["score"], 4)}
             for r in resultados
         ],
     }
