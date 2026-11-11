@@ -22,11 +22,12 @@ Regla del equipo: **cada quien sube sus propios commits de su parte**, en ramas 
 
 ## Lista de verificación de entrega
 
-- [ ] La app corre desde cero siguiendo solo el README
-- [ ] Métrica del modelo frente a la línea base
-- [ ] Agente con RAG, ≥ 2 herramientas, citas y manejo de errores
-- [ ] Al menos 2 visualizaciones y selección de parámetros
-- [ ] 10 a 15 preguntas de evaluación del agente
-- [ ] Informe (máximo 4 páginas)
-- [ ] Declaración de uso de IA generativa
+- [x] La app corre desde cero siguiendo solo el README (verificado el 11 nov clonando el repo en una carpeta nueva)
+- [x] Métrica del modelo frente a la línea base (`eval/metricas_modelo.json`)
+- [ ] **Modelo de la Parte 1 implementado por el equipo**: hoy es un Random Forest de scikit-learn, y el enunciado exige una implementación propia (por ejemplo, Naive Bayes o regresión logística escritos con numpy)
+- [x] Agente LLM con RAG híbrido, 3 herramientas, citas y manejo de errores
+- [x] Al menos 2 visualizaciones y selección de parámetros (mapa, serie de tiempo, predicción)
+- [x] 15 preguntas de evaluación del agente, LLM contra reglas (`eval/resultados.md`)
+- [x] Informe (máximo 4 páginas) — falta actualizar la sección 3 cuando cambie el modelo
+- [x] Declaración de uso de IA generativa — cada integrante debe completar qué herramienta usó en su parte
 - [ ] Los tres correos enviados
