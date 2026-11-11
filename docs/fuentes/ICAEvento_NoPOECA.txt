@@ -1,0 +1,47 @@
+                                                      RED CALIDAD DEL AIRE
+                        #CalidadDelAire
+                                                      Reporte actual ICA componente PM 2.5
+                                                                                                                      Miércoles, 20 de septiembre de 2023 - 11:00 *
+
+
+
+                                                                                                                                 ESTACIONES
+                                                                                                                                 DE TRÁFICO
+                                                                                                                                 O INDUSTRIALES
+                                                                                                                                 Su ubicación obedece a la necesidad
+                                                                                             ESTACIONES | Ubicación              de medir la influencia directa de las
+                                                                                                                                 industrias y los vehículos en la calidad
+                                                                                                                                 del aire de una zona en particular,
+                                                                            1 | Medellín - Centro                                mas no de su influencia directa a la
+                                                                          Estación Tráfico Centro                                salud de la población.
+    2
+                                                                                                                                 El área de influencia de los datos
+                                                                                                                                 registrados por este tipo de
+    1
+                                                                                      2 | Medellín                               estaciones es más pequeña, así que
+                                                                                                                                 si la estación registra un ICA en
+                                                                     Fiscalía General de la Nación
+                                                                                                                                 escala roja o naranja, esto no debe
+                                                                                                                                 ocasionar alarma con respecto a la
+                                                                                                                                 calidad del aire.
+
+
+
+
+ Datos pendientes de validación final.
+*Cálculos a partir de registros de 24 horas previas a este reporte
+
+                                                 CONVENCIONES
+                                                                         Buena
+                                  Datos no disponibles
+                                        para el cálculo ND               Moderada
+                              Concentración promedio                     Dañina a grupos
+                                      PM 2.5 [µg/m³*]        #           sensibles
+                                                                         Dañina a la salud
+
+
+
+
+                                                   @siatamedellin                                               @areametropol
+                                                        www.siata.gov.co                                          www.metropol.gov.co
+

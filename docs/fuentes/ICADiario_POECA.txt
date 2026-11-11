@@ -1,0 +1,51 @@
+                                                              RED CALIDAD DEL AIRE
+                                                               Reporte diario ICA PM2.5                                                               Martes, 10 de noviembre de 2026 *
+
+
+
+
+                                                                                                                          19
+
+
+
+    1
+                                                                                               ESTACIONES | UBICACIÓN
+   15                                                                   9
+                                                                                               1 | Girardota          11 | Medellín - Aranjuez
+    8                                                                                          Tanques EPM                    I.E. Ciro Mendía
+   12                                                                                              2 | Itagüí    12 | Medellín - San Cristobal
+                                                                                                                                                       ESTACIONES DE
+                                                                        11
+                                                                                             Casa de Justicia     Biblioteca Fernando Botero           REPRESENTATIVIDAD
+   13                                                                   7                         3 | Itagüí              13 | Medellín - Belén        POBLACIONAL
+    6                                                                   18      Concejo Municipal de Itagüí             I.E. Pedro Justo Berrío        Los registros de estas
+                                                                        10                       4 | Caldas             14 | Medellín - Poblado        estaciones dan cuenta del
+   14
+                                                                                     E U Joaquin Aristizabal     I.E. INEM sede Santa Catalina         impacto real de los
+    2                                                                                                                                                  contaminantes atmosféricos
+                                                                                               5 | La Estrella                       15 | Bello
+    3                                                                   16                                                                             en la salud de la población. Si
+                                                                                                     Hospital              I.E. Fernando Vélez         alguna de estas estaciones
+    5                                                                   17
+                                                                                      6 | Medellín - Altavista                  16 | Envigado          presenta ICA rojo o naranja es
+    20                                                                            I.E. Pedro Octavio Amado              E.S.E. Santa Gertrudis         probable que adicional
+                                                                                7 | Medellín - Villa Hermosa                        17 | Sabaneta      a la emisión de contaminantes
+    4
+                                                                            Planta de Agua Potable de EPM                      I.E. Rafael J. Mejía
+                                                                                                                                                       de fuentes móviles y fijas, existan
+                                                                                                                                                       condiciones meteorológicas
+                                                                                 8 | Medellín - Robledo            18 | Medellín - Santa Elena         desfavorables para la dispersión
+                                                                   Parque Biblioteca Tomás Carrasquilla                 Medellín - Santa Elena         de contaminantes afectando
+                                                                                          9 | Copacabana                            19 | Barbosa       la calidad del aire.
+                                                                               Ciudadela Educativa La Vida                           Torre Social
+
+ Datos pendientes de validación final.                                           10 | Medellín - El Poblado                          20 | Estrella
+*Cálculos a partir de registros de las 00:00 a las 23:59 de este día.                     Universidad CES                             La Tablaza
+                                                     CONVENCIONES
+                                                                                 Buena
+                                   Datos no disponibles
+                                         para el cálculo ND                      Aceptable
+                              Concentración promedio                             Dañina a grupos
+                                      PM 2.5 [µg/m³*]          #                 sensibles
+                                                                                 Dañina a la salud
+
