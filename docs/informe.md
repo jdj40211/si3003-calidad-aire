@@ -13,14 +13,16 @@ En el Valle de Aburrá los episodios de contaminación por material particulado 
 
 Construimos un asistente que (1) muestra las mediciones reales de las estaciones del Área Metropolitana del Valle de Aburrá (AMVA), (2) predice la categoría de calidad del aire del día siguiente con un modelo clásico, y (3) responde preguntas en lenguaje natural citando la normativa y los protocolos oficiales mediante un agente con RAG. Todo se integra en un dashboard interactivo.
 
-#### 2. Datos
+## 2. Datos
+
 **Fuente.** Conjunto *"Calidad del Aire en Colombia"* de `datos.gov.co` (identificador `g4t8-zkc3`, publicado por el SISAIRE/IDEAM). Se filtra la autoridad ambiental AMVA y las variables `PM2.5`, `PLiquida` (lluvia), `VViento` (velocidad del viento) y `TAire2` (temperatura), tomando mediciones horarias entre 2020 y 2025.
 
 **Control de calidad e imputación sin fuga de datos.** Dado que la fuente presenta tramos con escalas inconsistentes y vacíos históricos (cerca del 55 % de los días carecen de reporte meteorológico completo), el flujo descarta meses-estación con distribuciones físicamente no plausibles y exige al menos 18 horas válidas por día, consolidando el porcentaje de meses válidos en `calidad_datos.csv` (`TAire2`: 100 %, `PM25`: 61.1 %, `PLiquida`: 36.9 %, `VViento`: 33.7 %). Posteriormente, se reindexa la serie sobre un **calendario diario continuo** (2.192 días) para evitar desplazamientos erróneos en los rezagos, se crea una bandera explícita de ausencia (`is_meteo_missing`), se imputa la lluvia faltante con `0` y se aplica propagación causal limitada (`ffill(limit=3)`) en viento y temperatura; los vacíos prolongados se rellenan **únicamente con la mediana del conjunto de entrenamiento** tras la partición temporal.
 
 **Resultado.** Se integran cuatro tablas procesadas y versionadas (`pm25_diario.csv` con 27.553 estación-días en **28 estaciones**, `meteo_diario.csv` con 971 días reportados, el catálogo espacial `estaciones.csv` y `calidad_datos.csv`).
 
-#### 3. Parte 1 — Modelo clásico (IA tradicional)
+## 3. Parte 1 — Modelo clásico (IA tradicional)
+
 **Tarea.** Clasificar la categoría máxima del ICA **del día siguiente ($t+1$)** en tres clases (`0 = Buena`, `1 = Aceptable`, `2 = Dañina a grupos sensibles o peor`), empleando como objetivo `ica_max`.
 
 **Ingeniería de características (24 variables).** A partir de la integración multifuente se construyen: (a) **agregados diarios y espaciales**, incluyendo promedios y máximos de $\text{PM}_{2.5}$, promedio ponderado por horas válidas (`pm25_weighted_horas`), **latitud ponderada por $\text{PM}_{2.5}$** (`pm25_weighted_lat`, para capturar desplazamientos norte-sur de la contaminación), cobertura de red (`pct_cobertura_red`) y municipios activos; (b) **meteorología y confiabilidad**, integrando lluvia, viento, temperatura, `is_meteo_missing` y un índice diario de confiabilidad (`data_reliability_score`) ponderado según `calidad_datos.csv`; y (c) **dinámica temporal**, con rezagos de 1 a 3 días, variación diaria (`pm25_diff_1d`), volatilidad y máximo móvil de 3 días (`shift(1)` para evitar *data leakage*), codificación cíclica del mes (`month_sin`, `month_cos`), fin de semana y temporada crítica (marzo–abril y octubre–noviembre).
@@ -68,7 +70,8 @@ Se definió un banco de **15 preguntas** (`eval/preguntas.json`) que cubre datos
 
 El README tiene los pasos completos: crear un entorno virtual, `pip install -r requirements.txt`, copiar `.env.example` a `.env` con una clave de NVIDIA NIM o Groq, y `streamlit run app/dashboard.py`. Los datos procesados están versionados, así que la app no depende de la API de datos.gov.co. La primera ejecución descarga el modelo de embeddings (unos 220 MB) y entrena el clasificador; las siguientes reutilizan lo guardado. Se verificó clonando el repositorio en una carpeta nueva y siguiendo solo el README: el dashboard y el chat funcionaron en unos 45 s la primera vez. Sin clave de API, la app también corre con el agente de respaldo.
 
-#### 8. Limitaciones y trabajo futuro
+## 8. Limitaciones y trabajo futuro
+
 * **Desbalance severo de clases y compromiso *Precision–Recall*:** En el periodo reciente de prueba (431 días), la clase `1 = Aceptable` concentra el **97,47 %** de los registros (420 días), frente a solo 9 días dañinos (`2.0`) y 2 días buenos (`0.0`). Aunque la ponderación balanceada en el modelo propio permite anticipar episodios críticos (`Recall = 0,3333` frente a `0,0000` de la persistencia), incrementa las falsas alarmas y reduce ligeramente la exactitud global.
 * **Cobertura meteorológica parcial y linealidad:** La ausencia histórica de ~55 % en variables como viento y lluvia introduce incertidumbre en transiciones climáticas bruscas; además, al ser un clasificador lineal, la regresión logística tiene menor capacidad para modelar inversiones térmicas altamente no lineales. A futuro se propone incorporar pronósticos meteorológicos exógenos y datos de tráfico.
 * **Alcance del corpus RAG y dependencia de LLM:** El corpus resume el POECA de 2016 (sin incluir su actualización de 2018, Acuerdo 04) ni guías oficiales sobre tipos de mascarilla. Asimismo, sin clave de API externa el sistema opera con el agente de respaldo por reglas, de menor flexibilidad semántica.
