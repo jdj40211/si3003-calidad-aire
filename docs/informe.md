@@ -3,7 +3,7 @@
 **SI3003 Inteligencia Artificial — Universidad EAFIT, 2026-2 · Idea 3.1**
 **Equipo:** Juan David Sierra · Keita Ashizawa · Juan José Palacio (Integrante 3)
 
-> Documento de máximo 4 páginas. El detalle de cada módulo está en el código (`src/`, `app/`, `eval/`) y en el `README.md`.
+> Documento de máximo 4 páginas. El detalle de cada módulo está en el código (`src/`, `app/`, `notebook/`,`eval/`) y en el `README.md`.
 
 ---
 
@@ -13,21 +13,27 @@ En el Valle de Aburrá los episodios de contaminación por material particulado 
 
 Construimos un asistente que (1) muestra las mediciones reales de las estaciones del Área Metropolitana del Valle de Aburrá (AMVA), (2) predice la categoría de calidad del aire del día siguiente con un modelo clásico, y (3) responde preguntas en lenguaje natural citando la normativa y los protocolos oficiales mediante un agente con RAG. Todo se integra en un dashboard interactivo.
 
-## 2. Datos
+#### 2. Datos
+**Fuente.** Conjunto *"Calidad del Aire en Colombia"* de `datos.gov.co` (identificador `g4t8-zkc3`, publicado por el SISAIRE/IDEAM). Se filtra la autoridad ambiental AMVA y las variables `PM2.5`, `PLiquida` (lluvia), `VViento` (velocidad del viento) y `TAire2` (temperatura), tomando mediciones horarias entre 2020 y 2025.
 
-**Fuente.** Conjunto "Calidad del Aire en Colombia" de datos.gov.co (identificador `g4t8-zkc3`, publicado por el SISAIRE/IDEAM). Se filtra la autoridad ambiental `AMVA` y las variables `PM2.5`, `PLiquida` (lluvia), `VViento` (velocidad del viento) y `TAire2` (temperatura), tomando solo las mediciones horarias (`duración = 60 min`) entre 2020 y 2025.
+**Control de calidad e imputación sin fuga de datos.** Dado que la fuente presenta tramos con escalas inconsistentes y vacíos históricos (cerca del 55 % de los días carecen de reporte meteorológico completo), el flujo descarta meses-estación con distribuciones físicamente no plausibles y exige al menos 18 horas válidas por día, consolidando el porcentaje de meses válidos en `calidad_datos.csv` (`TAire2`: 100 %, `PM25`: 61.1 %, `PLiquida`: 36.9 %, `VViento`: 33.7 %). Posteriormente, se reindexa la serie sobre un **calendario diario continuo** (2.192 días) para evitar desplazamientos erróneos en los rezagos, se crea una bandera explícita de ausencia (`is_meteo_missing`), se imputa la lluvia faltante con `0` y se aplica propagación causal limitada (`ffill(limit=3)`) en viento y temperatura; los vacíos prolongados se rellenan **únicamente con la mediana del conjunto de entrenamiento** tras la partición temporal.
 
-**Control de calidad.** La fuente presenta tramos con escalas inconsistentes (valores multiplicados por factores no constantes entre 2020 y 2023). En lugar de corregir valores arbitrariamente, el pipeline (`src/datos/procesar.py`) **descarta los meses por estación cuya distribución no es físicamente plausible** (reglas sobre la mediana y el percentil 99 de cada variable) y exige al menos 18 horas con dato para promediar un día. El reporte de cuánto se conserva queda en `data/processed/calidad_datos.csv` (por ejemplo, se conserva el 61 % de los meses-estación de PM2.5). Los datos procesados quedan versionados en `data/processed/` para que la app no dependa de la disponibilidad de la API.
+**Resultado.** Se integran cuatro tablas procesadas y versionadas (`pm25_diario.csv` con 27.553 estación-días en **28 estaciones**, `meteo_diario.csv` con 971 días reportados, el catálogo espacial `estaciones.csv` y `calidad_datos.csv`).
 
-**Resultado.** ~27.500 estación-días de PM2.5 diario en 29 estaciones, con su categoría ICA, más una serie meteorológica diaria del valle.
+#### 3. Parte 1 — Modelo clásico (IA tradicional)
+**Tarea.** Clasificar la categoría máxima del ICA **del día siguiente ($t+1$)** en tres clases (`0 = Buena`, `1 = Aceptable`, `2 = Dañina a grupos sensibles o peor`), empleando como objetivo `ica_max`.
 
-## 3. Parte 1 — Modelo clásico (IA tradicional)
+**Ingeniería de características (24 variables).** A partir de la integración multifuente se construyen: (a) **agregados diarios y espaciales**, incluyendo promedios y máximos de $\text{PM}_{2.5}$, promedio ponderado por horas válidas (`pm25_weighted_horas`), **latitud ponderada por $\text{PM}_{2.5}$** (`pm25_weighted_lat`, para capturar desplazamientos norte-sur de la contaminación), cobertura de red (`pct_cobertura_red`) y municipios activos; (b) **meteorología y confiabilidad**, integrando lluvia, viento, temperatura, `is_meteo_missing` y un índice diario de confiabilidad (`data_reliability_score`) ponderado según `calidad_datos.csv`; y (c) **dinámica temporal**, con rezagos de 1 a 3 días, variación diaria (`pm25_diff_1d`), volatilidad y máximo móvil de 3 días (`shift(1)` para evitar *data leakage*), codificación cíclica del mes (`month_sin`, `month_cos`), fin de semana y temporada crítica (marzo–abril y octubre–noviembre).
 
-**Tarea.** Clasificar la categoría ICA **del día siguiente** en tres clases: `0 = Buena`, `1 = Aceptable`, `2 = Dañina para grupos sensibles o peor`, usando como objetivo la categoría más crítica del día (`ica_max`).
+**Modelo propio en NumPy y comparación con línea base.** Se implementó desde cero en **NumPy** una **Regresión Logística Multiclase (Softmax)** con estandarización Z-score interna, regularización $L_2$ ($\lambda = 0.01$), descenso de gradiente y ponderación balanceada de clases normalizada a media unitaria (`class_weight='balanced'`). Los datos se dividen cronológicamente (`shuffle=False`, 80 % entrenamiento / 20 % prueba, 431 días de evaluación) y se comparan frente a una **línea base de persistencia** ($\hat{y}_{t+1} = y_t$) y un **Random Forest balanceado** de referencia:
 
-**Características** (`src/modelo/caracteristicas.py`). Agregados diarios del valle (PM2.5 medio y máximo), meteorología (lluvia, viento, temperatura), rezagos de 1 a 3 días del PM2.5, medias/máximos móviles de 3 días y variables de calendario (mes, día de la semana, fin de semana, temporada crítica).
+| Modelo | Exactitud (*Accuracy*) | F1-Score Macro | *Recall* Clase Dañina (`2.0`) |
+| :--- | :---: | :---: | :---: |
+| Línea Base (Persistencia) | 94,94 % | 0,3240 | 0,0000 |
+| Random Forest Balanceado (Referencia) | 96,32 % | 0,3680 | 0,2222 |
+| **Regresión Logística Propia (NumPy)** | **93,04 %** | **0,3801** | **0,3333** |
 
-**Modelo y línea base.** Random Forest con `class_weight="balanced"` (para no ignorar las clases de alerta, que son minoritarias), con una **división temporal sin barajar** que respeta el orden de las fechas. Se compara contra una **línea base de persistencia** (mañana = hoy), que es un referente fuerte porque la calidad del aire tiene mucha inercia día a día. El módulo `src/modelo/predecir.py` entrena, evalúa, guarda el modelo y expone `predecir_manana()`, que es lo que consumen el dashboard y el agente. Las métricas (accuracy del modelo vs. línea base y F1 macro) se guardan en `eval/metricas_modelo.json`.
+Mientras que la persistencia es incapaz de anticipar episodios críticos (`Recall = 0.0000`), el modelo propio en NumPy logra detectar **el 33,3 % de los días dañinos** y obtiene el mayor **F1-Score Macro (0,3801)**. El flujo de predicción se expone mediante `predecir_manana()` para su consumo en el dashboard y el agente.
 
 ## 4. Parte 2 — Agente con RAG (IA moderna)
 
@@ -62,9 +68,8 @@ Se definió un banco de **15 preguntas** (`eval/preguntas.json`) que cubre datos
 
 El README tiene los pasos completos: crear un entorno virtual, `pip install -r requirements.txt`, copiar `.env.example` a `.env` con una clave de NVIDIA NIM o Groq, y `streamlit run app/dashboard.py`. Los datos procesados están versionados, así que la app no depende de la API de datos.gov.co. La primera ejecución descarga el modelo de embeddings (unos 220 MB) y entrena el clasificador; las siguientes reutilizan lo guardado. Se verificó clonando el repositorio en una carpeta nueva y siguiendo solo el README: el dashboard y el chat funcionaron en unos 45 s la primera vez. Sin clave de API, la app también corre con el agente de respaldo.
 
-## 8. Limitaciones y trabajo futuro
-
-- La línea base de persistencia es exigente: en días estables la ganancia del modelo es moderada; el valor del modelo está sobre todo en anticipar los cambios de categoría.
-- El corpus resume el POECA de 2016; existe una actualización de 2018 (Acuerdo Metropolitano 04) que no se incorporó. Tampoco incluye recomendaciones oficiales sobre mascarillas.
-- El agente depende de un proveedor externo de LLM: sin clave o sin conexión, responde el agente de respaldo, con menos precisión. La evaluación por palabras clave no garantiza que cada respuesta sea correcta, y el LLM puede variar entre corridas.
-- El sistema es una herramienta académica y **no** constituye consejo médico ni sustituye los avisos oficiales del SIATA ni del AMVA.
+#### 8. Limitaciones y trabajo futuro
+* **Desbalance severo de clases y compromiso *Precision–Recall*:** En el periodo reciente de prueba (431 días), la clase `1 = Aceptable` concentra el **97,47 %** de los registros (420 días), frente a solo 9 días dañinos (`2.0`) y 2 días buenos (`0.0`). Aunque la ponderación balanceada en el modelo propio permite anticipar episodios críticos (`Recall = 0,3333` frente a `0,0000` de la persistencia), incrementa las falsas alarmas y reduce ligeramente la exactitud global.
+* **Cobertura meteorológica parcial y linealidad:** La ausencia histórica de ~55 % en variables como viento y lluvia introduce incertidumbre en transiciones climáticas bruscas; además, al ser un clasificador lineal, la regresión logística tiene menor capacidad para modelar inversiones térmicas altamente no lineales. A futuro se propone incorporar pronósticos meteorológicos exógenos y datos de tráfico.
+* **Alcance del corpus RAG y dependencia de LLM:** El corpus resume el POECA de 2016 (sin incluir su actualización de 2018, Acuerdo 04) ni guías oficiales sobre tipos de mascarilla. Asimismo, sin clave de API externa el sistema opera con el agente de respaldo por reglas, de menor flexibilidad semántica.
+* **Aviso académico:** Este sistema es una herramienta experimental con fines académicos y **no** constituye consejo médico ni sustituye los avisos oficiales del SIATA ni del AMVA.
